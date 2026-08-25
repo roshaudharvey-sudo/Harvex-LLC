@@ -102,7 +102,7 @@ app.post("/api/create-checkout-session", async (req, res) => {
     const baseUrl = process.env.PUBLIC_URL || `${req.protocol}://${req.get("host")}`;
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      automatic_payment_methods: { enabled: true },
+      payment_method_types: ["card"],
       customer_email: email,
       line_items: [{
         quantity: 1,
