@@ -9,8 +9,13 @@ const stripeKey = process.env.STRIPE_SECRET_KEY;
 const stripe = stripeKey ? Stripe(stripeKey) : null;
 
 const SERVICE_RADIUS_MILES = 65;
-const SERVICE_CENTER = "1015 County Road 385, Myrtle, MS 38650";
-const NOMINATIM_URL = "https://nominatim.openstreetmap.org/search";app.use(express.json());
+
+const SERVICE_CENTER = {
+  lat: 34.465341,
+  lon: -89.127076
+};
+
+const NOMINATIM_URL = "https://nominatim.openstreetmap.org/search";
 app.use(express.static(path.join(__dirname, "public")));
 
 const prices = {
@@ -20,14 +25,11 @@ const prices = {
   "Yard Cleanup": 75
 };
 
-function escapeHtml(value = "") {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}async function geocodeAddress(address) {
+function getServiceCenterCoordinates() {
+  return Promise.resolve(SERVICE_CENTER);
+}
+
+async function geocodeAddress(address) {
   const url = new URL(NOMINATIM_URL);
   url.searchParams.set("format", "jsonv2");
   url.searchParams.set("limit", "1");
