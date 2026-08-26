@@ -8,7 +8,9 @@ const PORT = process.env.PORT || 3000;
 const stripeKey = process.env.STRIPE_SECRET_KEY;
 const stripe = stripeKey ? Stripe(stripeKey) : null;
 
-app.use(express.json());
+const SERVICE_RADIUS_MILES = 65;
+const SERVICE_CENTER = "1015 County Road 385, Myrtle, MS 38650";
+const NOMINATIM_URL = "https://nominatim.openstreetmap.org/search";app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 const prices = {
@@ -25,6 +27,90 @@ function escapeHtml(value = "") {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}async function geocodeAddress(address) {
+  const url = new URL(NOMINATIM_URL);
+  url.searchParams.set("format", "jsonv2");
+  url.searchParams.set("limit", "1");
+  url.searchParams.set("countrycodes", "us");
+  url.searchParams.set("q", address);
+
+  const response = await fetch(url, {
+    headers: {
+      "User-Agent": "HarvexLawnCare/1.0 (https://harvexlawncare.com)"
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error("Address lookup failed.");
+  }
+
+  const results = await response.json();
+
+  if (!results.length) {
+    return null;
+  }
+
+  return {
+    lat: Number(results[0].lat),
+    lon: Number(results[0].lon)
+  };
+}
+
+function distanceMiles(a, b) {
+  const earthRadiusMiles = 3958.7613;
+
+  const toRadians = degrees => degrees * Math.PI / 180;
+
+  const dLat = toRadians(b.lat - a.lat);
+  const dLon = toRadians(b.lon - a.lon);
+
+  const lat1 = toRadians(a.lat);
+  const lat2 = toRadians(b.lat);
+
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1) *
+    Math.cos(lat2) *
+    Math.sin(dLon / 2) ** 2;
+
+  return earthRadiusMiles *
+    2 *
+    Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
+}
+
+let serviceCenterCoordinatesPromise;
+
+function getServiceCenterCoordinates() {
+  if (!serviceCenterCoordinatesPromise) {
+    serviceCenterCoordinatesPromise = geocodeAddress(SERVICE_CENTER);
+  }
+
+  return serviceCenterCoordinatesPromise;
+}
+
+async function validateServiceArea(address) {
+  const [center, customer] = await Promise.all([
+    getServiceCenterCoordinates(),
+    geocodeAddress(address)
+  ]);
+
+  if (!center) {
+    throw new Error("Harvex service area could not be located.");
+  }
+
+  if (!customer) {
+    return {
+      allowed: false,
+      reason: "We couldn't locate that service address. Please check the address and try again."
+    };
+  }
+
+  const distance = distanceMiles(center, customer);
+
+  return {
+    allowed: distance <= SERVICE_RADIUS_MILES,
+    distance: Number(distance.toFixed(1))
+  };
 }
 
 async function sendEmail({to, subject, html, replyTo}) {
@@ -98,6 +184,14 @@ app.post("/api/create-checkout-session", async (req, res) => {
     if (!prices[service] || !date || !time || !name || !phone || !email || !address) {
       return res.status(400).json({error: "Please complete all required booking fields."});
     }
+    const serviceArea = await validateServiceArea(address);
+
+if (!serviceArea.allowed) {
+  const error = serviceArea.reason ||
+    `That address is approximately ${serviceArea.distance} miles away. Harvex currently serves locations within ${SERVICE_RADIUS_MILES} miles.`;
+
+  return res.status(400).json({error});
+}
 
     const baseUrl = process.env.PUBLIC_URL || `${req.protocol}://${req.get("host")}`;
     const session = await stripe.checkout.sessions.create({
