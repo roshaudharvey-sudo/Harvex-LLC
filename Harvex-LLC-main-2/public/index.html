@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Harvex Lawn Care | Clean Lawns. Done Right.</title>
+  <meta name="description" content="Professional lawn mowing, edging, trimming and yard cleanup. Schedule and pay online.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="#top"><span class="brand-mark">H</span><span>HARVEX<br><small>LAWN CARE</small></span></a>
+    <nav>
+      <a href="#services">Services</a>
+      <a href="#work">Our Work</a>
+      <a href="#booking" class="nav-cta">Book Now</a>
+      <a href="/employee-login.html">Employee Login</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">LOCAL • RELIABLE • PROFESSIONAL</p>
+        <h1>A better-looking lawn starts here.</h1>
+        <p class="hero-text">Mowing, edging, trimming and cleanups without the hassle. Pick your service, choose a time, and pay online.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#booking">Schedule Service</a>
+          <a class="button ghost" href="#services">View Services</a>
+        </div>
+        <div class="trust-row"><span>✓ Easy online booking</span><span>✓ Secure checkout</span><span>✓ Friendly local service</span></div>
+      </div>
+      <div class="hero-photo">
+        <img src="/images/hero-lawn.jpeg" alt="Freshly mowed lawn with visible mowing lines">
+        <div class="photo-badge"><strong>Fresh cut.</strong><span>Clean finish every time.</span></div>
+      </div>
+    </section>
+
+    <section id="services" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">SERVICES</p>
+        <h2>Keep it simple.</h2>
+        <p>Choose the service your yard needs. Simple, upfront pricing.</p>
+      </div>
+      <div class="service-grid">
+        <article class="service-card"><div class="icon">✂</div><h3>Lawn Mowing</h3><p>Mow, edge and blow off hard surfaces.</p><div class="price">$45 <small>starting at</small></div><button data-service="Lawn Mowing" data-price="45">Book this</button></article>
+        <article class="service-card featured"><div class="popular">POPULAR</div><div class="icon">✦</div><h3>Mow + Full Cleanup</h3><p>Mowing plus a cleaner, finished-looking yard.</p><div class="price">$65 <small>starting at</small></div><button data-service="Mow + Full Cleanup" data-price="65">Book this</button></article>
+        <article class="service-card"><div class="icon">🌿</div><h3>Hedge Trimming</h3><p>Shape overgrown shrubs and clean up clippings.</p><div class="price">$50 <small>starting at</small></div><button data-service="Hedge Trimming" data-price="50">Book this</button></article>
+        <article class="service-card"><div class="icon">🍂</div><h3>Yard Cleanup</h3><p>Leaves, debris, overgrowth and general cleanup.</p><div class="price">$75 <small>starting at</small></div><button data-service="Yard Cleanup" data-price="75">Book this</button></article>
+      </div>
+    </section>
+
+    <section id="work" class="gallery section">
+      <div class="section-heading"><p class="eyebrow">THE FINISH</p><h2>Clean lines. Clean property.</h2></div>
+      <div class="gallery-grid">
+        <img src="/images/property-front.jpeg" alt="Well-maintained home and lawn">
+        <img src="/images/property-side.jpeg" alt="Large green lawn beside a home">
+      </div>
+    </section>
+
+
+    <section id="offer" class="offer section">
+      <div class="offer-card">
+        <div>
+          <p class="eyebrow">NEW CUSTOMER OFFER</p>
+          <h2>Get 50% off your first service.</h2>
+          <p>Sign up with your name and email and we'll create your one-time first-service offer.</p>
+        </div>
+        <form id="signup-form" class="signup-form">
+          <label>Your name
+            <input name="name" placeholder="John Smith" required>
+          </label>
+          <label>Email
+            <input name="email" type="email" placeholder="you@email.com" required>
+          </label>
+          <button class="button primary" type="submit">Get My 50% Off</button>
+          <p id="signup-message" class="form-message"></p>
+          <div id="promo-result" class="promo-result" hidden></div>
+        </form>
+      </div>
+    </section>
+
+    <section id="booking" class="booking section">
+      <div class="booking-intro">
+        <p class="eyebrow">BOOK ONLINE</p>
+        <h2>Pick your service.<br>Pick your time.</h2>
+        <p>Submit your details and you'll be sent to secure checkout. Your booking is saved only after successful payment.</p>
+        <div class="booking-note"><strong>Need a custom quote?</strong><br>Use the notes field to tell us about the yard, or contact us before booking.</div>
+      </div>
+
+      <form id="booking-form" class="booking-form">
+        <div class="form-row">
+          <label>Service
+            <select id="service" name="service" required>
+              <option value="">Select a service</option>
+              <option value="Lawn Mowing" data-price="45">Lawn Mowing — $45</option>
+              <option value="Mow + Full Cleanup" data-price="65">Mow + Full Cleanup — $65</option>
+              <option value="Hedge Trimming" data-price="50">Hedge Trimming — $50</option>
+              <option value="Yard Cleanup" data-price="75">Yard Cleanup — $75</option>
+            </select>
+          </label>
+          <label>Preferred date
+            <input type="date" id="date" name="date" required>
+          </label>
+        </div>
+        <div class="form-row">
+          <label>Preferred time
+            <select name="time" required>
+              <option value="">Choose a window</option>
+              <option>8:00 AM – 10:00 AM</option>
+              <option>10:00 AM – 12:00 PM</option>
+              <option>12:00 PM – 2:00 PM</option>
+              <option>2:00 PM – 4:00 PM</option>
+              <option>4:00 PM – 6:00 PM</option>
+            </select>
+          </label>
+          <label>Your name
+            <input name="name" placeholder="John Smith" required>
+          </label>
+        </div>
+        <div class="form-row">
+          <label>Phone
+            <input name="phone" type="tel" placeholder="(555) 555-5555" required>
+          </label>
+          <label>Email
+            <input name="email" type="email" placeholder="you@email.com" required>
+          </label>
+        </div>
+        <label>Service address
+          <input name="address" placeholder="123 Main St, City, State" required>
+        </label>
+        <label>Anything we should know?
+          <textarea name="notes" rows="3" placeholder="Gate code, pets, overgrown areas, special requests, etc."></textarea>
+        </label>
+        <div class="checkout-bar">
+          <div><span>Estimated total</span><strong id="total">$0</strong></div>
+          <button class="button primary large" type="submit">Continue to Secure Payment →</button>
+        </div>
+        <p class="secure">🔒 Payment is handled by Stripe. Card details are never stored on this website.</p>
+        <p id="form-message" class="form-message"></p>
+      </form>
+    </section>
+
+    <section class="cta">
+      <div><p class="eyebrow">READY WHEN YOU ARE</p><h2>Let's make your yard the best-looking one on the block.</h2><a class="button light" href="#booking">Book Your Cut</a></div>
+    </section>
+  </main>
+
+  <footer>
+    <div><strong>HARVEX LAWN CARE</strong><p>Professional lawn care without the hassle.</p></div>
+    <div><a href="#services">Services</a><a href="#booking">Book</a><a href="mailto:harvexpertise@gmail.com">Email</a></div>
+    <p class="copyright">© 2026 Harvex Lawn Care. All rights reserved.</p>
+  </footer>
+  <script src="/app.js"></script>
+</body>
+</html>
